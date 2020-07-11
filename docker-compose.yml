@@ -1,0 +1,42 @@
+version: '3'
+
+volumes:
+  pg_data: {}
+
+services:
+  db:
+    image: postgres:9.5-alpine
+    volumes:
+      - pg_data:/pgdata
+    ports:
+      - "5432:5432"
+    environment:
+      - PGDATA=/pgdata
+      - POSTGRES_DB=polls
+      - POSTGRES_USER=polls
+      - POSTGRES_PASSWORD=polls
+
+  django:
+    build:
+      context: .
+      dockerfile: ./compose/Dockerfile
+    depends_on:
+      - db
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    environment:
+      - USE_DOCKER=yes
+      - IPYTHONDIR=/app/.ipython
+      - DJANGO_SETTINGS_MODULE=django_terraform.settings_dev
+      - DB_NAME=polls
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=polls
+      - DB_PASSWORD=polls
+
+    tty: true
+    stdin_open: true
+    command: /start
+
