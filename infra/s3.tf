@@ -1,18 +1,15 @@
-resource "aws_cloudfront_origin_access_identity" "this" {
-  comment = "CloudFront Origin Access Identity for S3 buckets"
-}
-
 data "aws_iam_policy_document" "static_files_policy" {
   statement {
     actions = [
-      "s3:GetObject"]
+      "s3:GetObject",
+      "s3:PutObject"]
     resources = [
       "${aws_s3_bucket.static_files.arn}/*"]
 
     principals {
       type = "AWS"
       identifiers = [
-        aws_cloudfront_origin_access_identity.this.iam_arn]
+        "*"]
     }
   }
 
@@ -25,7 +22,7 @@ data "aws_iam_policy_document" "static_files_policy" {
     principals {
       type = "AWS"
       identifiers = [
-        aws_cloudfront_origin_access_identity.this.iam_arn]
+        "*"]
     }
   }
 }
@@ -44,6 +41,7 @@ resource "aws_s3_bucket" "static_files" {
       "*"]
     allowed_methods = [
       "GET",
+      "PUT",
       "HEAD"]
     allowed_origins = [
       "*"]
