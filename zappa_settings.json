@@ -1,0 +1,38 @@
+{
+  "_base_settings": {
+    "aws_region": "us-east-1",
+    "django_settings": "django_terraform.settings_prod",
+    "project_name": "django_terraform",
+    "runtime": "python3.6",
+    "slim_handler": false,
+    "exclude": [
+      "*.pyc", "*.pyo", "*.pyd", "*.swp", "*.zip", "__pycache__", ".cache", "venv",
+      "*.dylibs", "*.pdf", "*.po", "*.pyc", "*.pyd", "*.pyo", "*.swp", "*.zip",
+      "*darwin.so", "terraform", "terraform.*", ".terraform", ".pytest_cache", "*.ort",
+      "cfnlint", "IPython", "botocore", "virtualenv_support", ".idea"
+    ]
+
+  },
+  "prod": {
+    "extends": "_base_settings",
+    "debug": false,
+    "s3_bucket": "django-terraform-prod-zappa",
+    "environment_variables": {
+      "DJANGO_SECRET_KEY": "i$gi2kuswqvu&kxo*4jw@s9@a2@wad!__b%gko&0*#-&hsb6$7",
+      "DB_HOST": "django-terraform-prod-db.caoukeyviab4.us-east-1.rds.amazonaws.com",
+      "DB_PORT": "5432",
+      "DB_USER": "django",
+      "DB_PASSWORD": "terraform"
+    },
+    "vpc_config": {
+      "SubnetIds": [
+        "subnet-5c690b11",
+        "subnet-14ae714b",
+        "subnet-db28fbbd"
+      ],
+      "SecurityGroupIds": [
+        "sg-023d7c24"
+      ]
+    }
+  }
+}
